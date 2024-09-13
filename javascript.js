@@ -1,10 +1,12 @@
 var humanScore = 0;
 var computerScore = 0;
+var roundCount = 0;
 
-
-const rbutton = document.querySelector('#rbutton')
-const pbutton = document.querySelector('#pbutton')
-const sbutton = document.querySelector('#sbutton')
+const rbutton = document.querySelector('#rbutton');
+const pbutton = document.querySelector('#pbutton');
+const sbutton = document.querySelector('#sbutton');
+const runningScoreDiv = document.querySelector('#running-score');
+const finalResultsDiv = document.querySelector('#final-results');
 
 //randomly returns string a string value for either rock, paper or scissors
 function getComputerChoice() {
@@ -32,8 +34,9 @@ function getHumanChoice() {
     }
     }
 
-    //containes logic for function of rock paper scissors round
+//containes logic for function of rock paper scissors round
     function playRound (humanChoice, computerChoice) {
+        roundCount ++;
         if (humanChoice == 'paper') {
             if (computerChoice == 'rock') {
                 humanScore += 1;
@@ -67,17 +70,51 @@ function getHumanChoice() {
         }
     }
 
+//updates and displays current score upon button press
+function updateScore() {
+    runningScoreDiv.textContent = `Human: ${humanScore} - Computer: ${computerScore}`;
+}
+
+//announces the overall winner after 5 rounds and resets the game
+function checkForWinner() {
+    if (roundCount === 5) {
+        let winnerMessage = '';
+        if (humanScore > computerScore) {
+            winnerMessage = 'Game Over! You are the overall winner!';
+        } else if (computerScore > humanScore) {
+            winnerMessage = 'Game Over! The computer wins!';
+        } else {
+            winnerMessage = 'Game Over! It\'s a tie!';
+        }
+
+        alert(winnerMessage);
+        finalResultsDiv.textContent = winnerMessage;
+
+        humanScore = 0;
+        computerScore = 0;
+        roundCount = 0;
+
+        updateScore(); 
+    }
+}
+
 //activates round on click
-rbutton.addEventListener("click", () =>{
+rbutton.addEventListener("click", () => {
     alert(playRound('rock', getComputerChoice()));
+    updateScore(); 
+    checkForWinner(); 
 });
 
-pbutton.addEventListener("click", () =>{
+pbutton.addEventListener("click", () => {
     alert(playRound('paper', getComputerChoice()));
+    updateScore(); 
+    checkForWinner(); 
 });
 
-sbutton.addEventListener("click", () =>{
+sbutton.addEventListener("click", () => {
     alert(playRound('scissors', getComputerChoice()));
+    updateScore(); 
+    checkForWinner(); 
 });
 
 
